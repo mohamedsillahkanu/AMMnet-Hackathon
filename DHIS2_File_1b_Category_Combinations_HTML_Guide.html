@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHIS2 Hackathon Topic 2: Build Category Combinations</title>
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        background: #f5f7fa;
+        color: #263238;
+    }
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 35px 25px 60px;
+    }
+    .header {
+        background: #1565c0;
+        color: white;
+        padding: 35px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+    }
+    .header h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+    }
+    .header p {
+        margin: 0;
+        font-size: 16px;
+        opacity: 0.95;
+    }
+    .intro {
+        background: white;
+        border-left: 5px solid #1976d2;
+        padding: 18px 22px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+    }
+    .step {
+        background: white;
+        margin: 25px 0;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .step-header {
+        background: #1976d2;
+        color: white;
+        padding: 14px 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .step-body {
+        padding: 22px;
+    }
+    .step-body h3 {
+        color: #1565c0;
+        margin-top: 18px;
+    }
+    .click-path {
+        background: #e3f2fd;
+        border-radius: 7px;
+        padding: 12px 15px;
+        margin: 12px 0;
+        font-weight: bold;
+    }
+    .enter-box {
+        background: #f8f9fa;
+        border: 1px solid #dfe3e8;
+        border-radius: 7px;
+        padding: 15px;
+        margin: 12px 0;
+    }
+    .result {
+        background: #e8f5e9;
+        border-left: 4px solid #43a047;
+        padding: 12px 15px;
+        border-radius: 5px;
+        margin-top: 15px;
+    }
+    .screenshot {
+        margin-top: 22px;
+        border: 2px dashed #90a4ae;
+        background: #fafafa;
+        min-height: 230px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #607d8b;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    .screenshot strong {
+        display: block;
+        color: #455a64;
+        font-size: 17px;
+        margin-bottom: 7px;
+    }
+    code {
+        background: #f1f3f4;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+    ul {
+        padding-left: 22px;
+    }
+    .checklist {
+        background: white;
+        padding: 22px;
+        border-radius: 10px;
+        margin-top: 30px;
+    }
+    .footer {
+        text-align: center;
+        color: #607d8b;
+        margin-top: 35px;
+        font-size: 14px;
+    }
+</style>
+
+<style id="hackathon-dark">
+/* AMMnet DHIS2 Hackathon dark theme, colour blind safe (Okabe and Ito) */
+:root{
+  --bg:#0d1117; --surface:#161b22; --raised:#21262d; --line:#30363d;
+  --text:#e6edf3; --muted:#9aa7b4; --focus:#F0E442;
+  --info:#56B4E9; --ok:#009E73; --warn:#E69F00; --accent:#56B4E9;
+  --blue:#56B4E9; --blue2:#21262d; --blue3:#56B4E9; --light:#161b22; --green:#009E73;
+}
+body.topic-1{--accent:#56B4E9} body.topic-2{--accent:#F0E442} body.topic-3{--accent:#F0894A} body.topic-4{--accent:#009E73} body.topic-5{--accent:#CC79A7} body.topic-6{--accent:#E69F00}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif}
+a{color:var(--info)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.back-pill{position:sticky;top:10px;z-index:20;display:inline-block;margin:14px 0 0 16px;
+  background:var(--raised);color:var(--text);border:1px solid var(--line);border-radius:999px;
+  padding:7px 16px;font-size:14px;font-weight:600;text-decoration:none}
+.back-pill:hover{border-color:var(--accent)}
+.container{padding-top:18px}
+
+.header,.hero{background:var(--surface);color:var(--text);border:1px solid var(--line);
+  border-left:6px solid var(--accent);box-shadow:none}
+.header h1,.hero h1{color:#fff}
+.header p,.hero p{color:var(--muted);opacity:1}
+.topic-chip{display:inline-block;margin-bottom:10px;font-size:13px;font-weight:700;color:var(--accent);
+  border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:3px 12px}
+
+.intro,.note,.checklist{background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px}
+.intro{border-left:5px solid var(--info)}
+.note{border-left:5px solid var(--warn)}
+.checklist{border-top:4px solid var(--accent)}
+.checklist h2{color:#fff}
+
+.step{background:var(--surface);border:1px solid var(--line);box-shadow:none}
+.step-header,.step-title{background:var(--raised);color:#fff;border-bottom:1px solid var(--line);
+  border-left:6px solid var(--accent)}
+.step-body h3,.content h3{color:var(--accent)}
+
+.click-path,.action{background:rgba(86,180,233,.10);color:var(--text);border:0;border-left:4px solid var(--info)}
+.click-path strong,.action strong{color:var(--info)}
+.result{background:rgba(0,158,115,.12);color:var(--text);border-left:4px solid var(--ok)}
+.result strong{color:#3fc79a}
+.enter-box,.example,.design{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+
+.screenshot{background:var(--bg);border:2px dashed #4a5563;color:var(--muted)}
+.screenshot strong{color:var(--text)}
+.screenshot img{max-width:100%;height:auto;border-radius:6px}
+
+code{background:var(--raised);color:#F0E442;border:1px solid var(--line)}
+pre{background:#010409;color:#e6edf3;border:1px solid var(--line)}
+pre code{background:none;border:0;color:inherit}
+
+.table-wrap{overflow-x:auto;margin:15px 0}
+.table-wrap table{margin:0}
+table{background:var(--surface);color:var(--text)}
+th,td{border:1px solid var(--line)}
+th{background:var(--raised);color:#fff;border-bottom:2px solid var(--accent)}
+.swatch{border:1px solid #8b949e}
+
+/* dashboard sketch in topic 4 */
+.dashboard{background:var(--bg);border:1px solid var(--line)}
+.topbar{background:var(--raised);color:#fff;border-left:4px solid var(--accent)}
+.filter{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+.card,.panel{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+.card small{color:var(--muted)}
+.bar{background:var(--raised)}
+.bar span{background:var(--accent)}
+
+.topic-nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:34px}
+.topic-nav a{flex:1 1 220px;background:var(--surface);border:1px solid var(--line);border-radius:8px;
+  padding:12px 16px;color:var(--text);text-decoration:none}
+.topic-nav a:hover{border-color:var(--accent)}
+.topic-nav small{display:block;color:var(--muted)}
+.topic-nav .next{text-align:right}
+.footer{color:var(--muted)}
+@media (max-width:640px){
+  .container{padding-left:14px;padding-right:14px}
+  .header,.hero{padding:22px}
+  .header h1,.hero h1{font-size:24px}
+  .step-header,.step-title{font-size:17px}
+}
+</style>
+
+<style id="step1-shots">
+/* Annotated screenshots for Step 1 */
+.shot{margin:16px 0 8px;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.shot-frame{position:relative;line-height:0}
+.shot-frame img{display:block;width:100%;height:auto}
+.pin{position:absolute;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;
+  background:#F0E442;color:#0d1117;border:2px solid #0d1117;box-shadow:0 0 0 2px #F0E442;
+  font:800 15px/26px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;text-align:center}
+.shot figcaption{padding:10px 14px;font-size:15px;line-height:1.5;border-top:1px solid var(--line);color:var(--text)}
+.shot figcaption b{color:var(--accent)}
+ol.pins{list-style:none;margin:10px 0 6px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 18px}
+ol.pins li{display:flex;gap:10px;align-items:flex-start;margin:0}
+ol.pins .num{flex:0 0 26px;height:26px;border-radius:50%;background:#F0E442;color:#0d1117;font-weight:800;font-size:14px;line-height:26px;text-align:center;margin-top:1px}
+.creds{border-collapse:collapse;margin:4px 0 0;font-size:16px}
+.creds th,.creds td{border:1px solid var(--line);padding:8px 14px;text-align:left}
+.creds th{background:var(--raised);color:#fff}
+.creds td code{font-size:16px}
+.tip{background:rgba(230,159,0,.10);border-left:4px solid #E69F00;border-radius:5px;padding:12px 15px;margin-top:15px;color:var(--text)}
+.tip strong{color:#E69F00}
+.click-path a{color:#56B4E9;word-break:break-all}
+@media (max-width:640px){
+  /* keep the picture readable on a phone: it scrolls sideways instead of shrinking */
+  .shot-scroll{overflow-x:auto}
+  .shot-frame{width:640px}
+  .shot figcaption::after{content:" Swipe sideways to see the whole screen.";font-style:italic}
+  .pin{width:24px;height:24px;font-size:12px;line-height:20px}
+  ol.pins{grid-template-columns:1fr}
+}
+</style>
+
+<style id="step4-tables">
+.table-scroll{overflow-x:auto;margin:10px 0 4px}
+table.de-table{width:100%;min-width:620px;border-collapse:collapse;font-size:15.5px}
+table.de-table th,table.de-table td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+table.de-table th{background:var(--raised);color:#fff;border-bottom:2px solid var(--accent)}
+table.de-table td.n{width:38px;text-align:center;font-weight:800;color:var(--accent)}
+table.de-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+.shot figcaption em{display:block;margin-top:4px;font-size:14px}
+</style>
+</head>
+
+<body class="topic-2">
+<a class="back-pill" href="index.html" onclick="if(document.referrer&&/index\.html$|\/$/.test(document.referrer.split('?')[0])&&history.length>1){history.back();return false;}">&#8592; Back to the hackathon home</a>
+<div class="container">
+
+    <div class="header">
+        <span class="topic-chip">Topic 2 of 6</span>
+<h1>DHIS2 Category Combinations</h1>
+        <p>Step by Step Guide: Category Options, Categories and Category Combinations</p>
+    </div>
+
+    <div class="intro">
+        <strong>Purpose of this guide</strong>
+        <p>
+            Data often needs to be broken down, for example by sex or age group. This guide builds that breakdown in three parts: category options, categories and the category combination. Before you start, log in and open the Maintenance app as shown in Topic 1. After completing each step, insert a screenshot of your DHIS2 screen in the screenshot area.
+        </p>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step">
+        <div class="step-header">Step 1: Create Category Options</div>
+        <div class="step-body">
+            <p>
+                If your form needs disaggregation such as sex or age group, create
+                the required category options.
+            </p>
+
+            <div class="click-path">
+                Click: Categories / Category Options
+            </div>
+
+            <div class="enter-box">
+                <strong>Example:</strong><br><br>
+                Category: Sex<br>
+                Options: Male, Female
+            </div>
+
+            <div class="result">
+                <strong>Expected result:</strong>
+                The category options are available for use in a category.
+            </div>
+
+            <div class="screenshot">
+                <div>
+                    <strong>📸 INSERT SCREENSHOT HERE</strong>
+                    Screenshot showing the category/category option creation screen.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+        <div class="step-header">Step 2: Create Categories</div>
+        <div class="step-body">
+            <p>
+                Group the relevant category options into a category.
+            </p>
+
+            <div class="click-path">
+                Click: Categories → + New
+            </div>
+
+            <div class="enter-box">
+                <strong>Example:</strong><br><br>
+                Category name: Sex<br>
+                Category options: Male, Female
+            </div>
+
+            <div class="result">
+                <strong>Expected result:</strong>
+                The category is saved and can be used when creating a category combination.
+            </div>
+
+            <div class="screenshot">
+                <div>
+                    <strong>📸 INSERT SCREENSHOT HERE</strong>
+                    Screenshot of the category creation screen.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+        <div class="step-header">Step 3: Create a Category Combination</div>
+        <div class="step-body">
+            <p>
+                Create a category combination when data needs to be disaggregated
+                by one or more categories.
+            </p>
+
+            <div class="click-path">
+                Click: Category Combinations → + New
+            </div>
+
+            <div class="enter-box">
+                <strong>Example:</strong><br><br>
+                Name: Sex<br>
+                Category: Sex
+            </div>
+
+            <div class="result">
+                <strong>Expected result:</strong>
+                The category combination is available for assignment to data elements or datasets.
+            </div>
+
+            <div class="screenshot">
+                <div>
+                    <strong>📸 INSERT SCREENSHOT HERE</strong>
+                    Screenshot showing the Category Combination creation screen.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="checklist">
+        <h2>Final Checklist</h2>
+        <ul>
+            <li>☐ Category options created</li>
+            <li>☐ Categories created from the category options</li>
+            <li>☐ Category combination created</li>
+            <li>☐ Category combination chosen on the data elements that need the breakdown</li>
+        </ul>
+    </div>
+
+    <nav class="topic-nav" aria-label="Topics"><a class="prev" href="DHIS2_File_1_Step_by_Step_HTML_Guide.html"><small>Previous topic</small>&#8592; 1. Create data elements</a><a class="next" href="DHIS2_File_1c_Create_Data_Set_HTML_Guide.html"><small>Next topic</small>3. Create the data set &#8594;</a></nav>
+<div class="footer">
+        DHIS2 Hackathon, Topic 2: Build Category Combinations
+    </div>
+
+</div>
+</body>
+</html>
