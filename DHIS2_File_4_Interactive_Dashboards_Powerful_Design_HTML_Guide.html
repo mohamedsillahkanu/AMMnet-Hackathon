@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHIS2 Interactive Dashboards - Powerful Design Guide</title>
+<style>
+:root{
+ --blue:#0d47a1;--blue2:#1565c0;--blue3:#1976d2;--light:#e3f2fd;
+ --bg:#f4f7fb;--text:#263238;--muted:#607d8b;--green:#2e7d32;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1120px;margin:auto;padding:32px 24px 70px}
+.hero{background:linear-gradient(135deg,#0d47a1,#1976d2);color:#fff;padding:42px;border-radius:16px;margin-bottom:28px}
+.hero h1{font-size:34px;margin:0 0 8px}.hero p{margin:0;font-size:17px;opacity:.94}
+.note{background:#fff8e1;border-left:5px solid #ffb300;padding:17px 20px;border-radius:8px;margin:18px 0}
+.step{background:#fff;border-radius:12px;margin:25px 0;box-shadow:0 3px 14px rgba(0,0,0,.06);overflow:hidden}
+.step-title{background:var(--blue2);color:#fff;padding:15px 21px;font-size:20px;font-weight:700}
+.content{padding:22px}
+.action{background:var(--light);border-left:4px solid var(--blue3);padding:12px 15px;border-radius:6px;margin:13px 0}
+.result{background:#e8f5e9;border-left:4px solid var(--green);padding:12px 15px;border-radius:6px;margin:14px 0}
+.example{background:#f7f9fc;border:1px solid #dce3ea;padding:16px;border-radius:8px;margin:14px 0}
+.screenshot{min-height:250px;border:2px dashed #90a4ae;background:#fafafa;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;margin-top:20px;padding:20px;color:#607d8b}
+.screenshot strong{display:block;color:#455a64;font-size:17px;margin-bottom:6px}
+.dashboard{background:#f6f8fb;border:1px solid #d8dee5;padding:15px;border-radius:10px;margin:15px 0}
+.topbar{background:#1565c0;color:#fff;padding:14px;font-weight:bold;border-radius:6px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.filter{background:#fff;border:1px solid #ccd5dc;border-radius:5px;padding:7px 12px;font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:10px 0}
+.card{background:#fff;border:1px solid #dce3e8;border-radius:7px;padding:13px}
+.card small{color:#607d8b}.card b{display:block;font-size:23px;margin-top:4px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.panel{background:#fff;border:1px solid #dce3e8;border-radius:7px;padding:15px;min-height:140px}
+.bar{height:11px;background:#e0e6eb;border-radius:10px;margin:9px 0}.bar span{display:block;height:100%;width:72%;background:#1976d2;border-radius:10px}
+pre{white-space:pre-wrap;background:#263238;color:#f5f5f5;padding:18px;border-radius:8px;overflow:auto;font-size:13px}
+table{width:100%;border-collapse:collapse;margin:15px 0;background:#fff}
+th,td{border:1px solid #dfe4e8;padding:10px;text-align:left}th{background:#1565c0;color:#fff}
+.footer{text-align:center;color:var(--muted);margin-top:35px}
+@media(max-width:760px){.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.hero h1{font-size:27px}}
+</style>
+
+<style id="hackathon-dark">
+/* AMMnet DHIS2 Hackathon dark theme, colour blind safe (Okabe and Ito) */
+:root{
+  --bg:#0d1117; --surface:#161b22; --raised:#21262d; --line:#30363d;
+  --text:#e6edf3; --muted:#9aa7b4; --focus:#F0E442;
+  --info:#56B4E9; --ok:#009E73; --warn:#E69F00; --accent:#56B4E9;
+  --blue:#56B4E9; --blue2:#21262d; --blue3:#56B4E9; --light:#161b22; --green:#009E73;
+}
+body.topic-2{--accent:#E69F00} body.topic-3{--accent:#009E73} body.topic-4{--accent:#CC79A7}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif}
+a{color:var(--info)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.back-pill{position:sticky;top:10px;z-index:20;display:inline-block;margin:14px 0 0 16px;
+  background:var(--raised);color:var(--text);border:1px solid var(--line);border-radius:999px;
+  padding:7px 16px;font-size:14px;font-weight:600;text-decoration:none}
+.back-pill:hover{border-color:var(--accent)}
+.container{padding-top:18px}
+
+.header,.hero{background:var(--surface);color:var(--text);border:1px solid var(--line);
+  border-left:6px solid var(--accent);box-shadow:none}
+.header h1,.hero h1{color:#fff}
+.header p,.hero p{color:var(--muted);opacity:1}
+.topic-chip{display:inline-block;margin-bottom:10px;font-size:13px;font-weight:700;color:var(--accent);
+  border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:3px 12px}
+
+.intro,.note,.checklist{background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px}
+.intro{border-left:5px solid var(--info)}
+.note{border-left:5px solid var(--warn)}
+.checklist{border-top:4px solid var(--accent)}
+.checklist h2{color:#fff}
+
+.step{background:var(--surface);border:1px solid var(--line);box-shadow:none}
+.step-header,.step-title{background:var(--raised);color:#fff;border-bottom:1px solid var(--line);
+  border-left:6px solid var(--accent)}
+.step-body h3,.content h3{color:var(--accent)}
+
+.click-path,.action{background:rgba(86,180,233,.10);color:var(--text);border:0;border-left:4px solid var(--info)}
+.click-path strong,.action strong{color:var(--info)}
+.result{background:rgba(0,158,115,.12);color:var(--text);border-left:4px solid var(--ok)}
+.result strong{color:#3fc79a}
+.enter-box,.example,.design{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+
+.screenshot{background:var(--bg);border:2px dashed #4a5563;color:var(--muted)}
+.screenshot strong{color:var(--text)}
+.screenshot img{max-width:100%;height:auto;border-radius:6px}
+
+code{background:var(--raised);color:#F0E442;border:1px solid var(--line)}
+pre{background:#010409;color:#e6edf3;border:1px solid var(--line)}
+pre code{background:none;border:0;color:inherit}
+
+.table-wrap{overflow-x:auto;margin:15px 0}
+.table-wrap table{margin:0}
+table{background:var(--surface);color:var(--text)}
+th,td{border:1px solid var(--line)}
+th{background:var(--raised);color:#fff;border-bottom:2px solid var(--accent)}
+.swatch{border:1px solid #8b949e}
+
+/* dashboard sketch in topic 4 */
+.dashboard{background:var(--bg);border:1px solid var(--line)}
+.topbar{background:var(--raised);color:#fff;border-left:4px solid var(--accent)}
+.filter{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+.card,.panel{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+.card small{color:var(--muted)}
+.bar{background:var(--raised)}
+.bar span{background:var(--accent)}
+
+.topic-nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:34px}
+.topic-nav a{flex:1 1 220px;background:var(--surface);border:1px solid var(--line);border-radius:8px;
+  padding:12px 16px;color:var(--text);text-decoration:none}
+.topic-nav a:hover{border-color:var(--accent)}
+.topic-nav small{display:block;color:var(--muted)}
+.topic-nav .next{text-align:right}
+.footer{color:var(--muted)}
+@media (max-width:640px){
+  .container{padding-left:14px;padding-right:14px}
+  .header,.hero{padding:22px}
+  .header h1,.hero h1{font-size:24px}
+  .step-header,.step-title{font-size:17px}
+}
+</style>
+</head>
+<body class="topic-4">
+<a class="back-pill" href="index.html" onclick="if(document.referrer&&/index\.html$|\/$/.test(document.referrer.split('?')[0])&&history.length>1){history.back();return false;}">&#8592; Back to the hackathon home</a>
+<div class="container">
+
+<div class="hero">
+<span class="topic-chip">Topic 4 of 4</span>
+<h1>DHIS2 Interactive Dashboards</h1>
+<p>Step-by-Step Guide to Building Powerful, Interactive and Professional Programme Dashboards</p>
+</div>
+
+<div class="note">
+<strong>Purpose:</strong> This guide moves beyond simply adding charts to a dashboard. It explains how to design a dashboard as a decision-support product: define the questions, prepare indicators, create visualizations, arrange the page, add filters and interactions, test performance, and publish it for the intended users. Insert screenshots from your own DHIS2 instance at every marked location.
+</div>
+
+<div class="step">
+<div class="step-title">Step 1: Define the Dashboard Purpose</div>
+<div class="content">
+<p>Start with the decision the dashboard is intended to support. Do not begin by adding charts.</p>
+<div class="example">
+<strong>Example:</strong> NMCP Malaria Situation Dashboard<br><br>
+Primary questions:<br>
+• What is the current malaria burden?<br>
+• Where is malaria burden highest?<br>
+• Is performance improving or declining?<br>
+• Which interventions have coverage gaps?<br>
+• Where are data-quality problems occurring?
+</div>
+<div class="result"><strong>Expected result:</strong> You have a short list of decisions/questions that determines what belongs on the dashboard.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot of your dashboard planning/design document or DHIS2 dashboard environment.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 2: Define the Dashboard Audience</div>
+<div class="content">
+<p>Identify who will use the dashboard and what level of detail they need.</p>
+<div class="table-wrap"><table>
+<tr><th>User</th><th>Typical need</th></tr>
+<tr><td>National programme managers</td><td>National and district trends, targets, intervention performance</td></tr>
+<tr><td>District managers</td><td>District/facility performance and geographic variation</td></tr>
+<tr><td>Data managers</td><td>Completeness, timeliness and data-quality problems</td></tr>
+<tr><td>Partners/analysts</td><td>Detailed trends, comparisons and downloadable analysis</td></tr>
+</table></div>
+<div class="action"><strong>Action:</strong> Decide whether the dashboard is national, district, facility, intervention or data-quality focused.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the DHIS2 user/audience configuration or dashboard planning screenshot.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 3: Prepare the Indicators</div>
+<div class="content">
+<p>Make sure the indicators required for the dashboard already exist and have been tested.</p>
+<div class="example">
+<strong>Example malaria KPIs:</strong><br>
+Confirmed malaria cases<br>
+Malaria testing rate (%)<br>
+Test positivity rate (%)<br>
+ACT treatment rate (%)<br>
+ITN coverage (%)<br>
+SMC coverage (%)<br>
+Reporting completeness (%)
+</div>
+<div class="action"><strong>Action:</strong> Maintenance / Metadata Management → Indicators. Verify definitions, numerator, denominator, factor and aggregation.</div>
+<div class="result"><strong>Expected result:</strong> The dashboard will use approved indicators rather than calculations that are recreated differently in every visualization.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the Indicators list showing the indicators you will use.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 4: Open the Dashboard Application</div>
+<div class="content">
+<p>Open the DHIS2 Dashboard application.</p>
+<div class="action"><strong>Click:</strong> Apps → Dashboard</div>
+<p>The exact navigation can differ according to your DHIS2 version and installed applications.</p>
+<div class="result"><strong>Expected result:</strong> The Dashboard application opens.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the DHIS2 Apps menu and Dashboard application.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 5: Create a New Dashboard</div>
+<div class="content">
+<p>Create a dashboard for the programme or analytical purpose.</p>
+<div class="action"><strong>Action:</strong> Select the option to create/add a new dashboard and enter a clear name.</div>
+<div class="example"><strong>Example dashboard name:</strong><br>NMCP Malaria Situation Dashboard</div>
+<div class="result"><strong>Expected result:</strong> A new empty dashboard is available for design.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot of the Create New Dashboard screen.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 6: Design the Dashboard Architecture Before Adding Items</div>
+<div class="content">
+<p>Plan the page as a hierarchy of information.</p>
+<div class="dashboard">
+<div class="topbar">🦟 NMCP MALARIA SITUATION DASHBOARD</div>
+<div class="filters"><div class="filter">Organisation Unit ▼</div><div class="filter">Period ▼</div><div class="filter">Age Group ▼</div></div>
+<div class="cards"><div class="card"><small>CONFIRMED CASES</small><b>45,820</b></div><div class="card"><small>TESTED</small><b>71,420</b></div><div class="card"><small>POSITIVITY</small><b>64.2%</b></div><div class="card"><small>TREATMENT</small><b>91.5%</b></div></div>
+<div class="grid"><div class="panel"><b>Malaria Trend</b><div class="bar"><span></span></div><div class="bar"><span style="width:55%"></span></div></div><div class="panel"><b>Malaria Burden Map</b><p>Interactive geographic visualization</p></div></div>
+</div>
+<div class="action"><strong>Design rule:</strong> Put the most important information at the top. Detailed analysis comes below.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert your blank DHIS2 dashboard before adding dashboard items.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 7: Create KPI Cards</div>
+<div class="content">
+<p>Use single-value visualizations for headline indicators that users need to understand immediately.</p>
+<div class="example">
+<strong>Recommended first-row cards:</strong><br>
+Confirmed Cases | Tested | Positivity Rate | Treatment Coverage
+</div>
+<div class="action"><strong>Action:</strong> Create a visualization for each KPI, configure the indicator, organisation unit and period, then add the visualization to the dashboard.</div>
+<div class="result"><strong>Expected result:</strong> Users can understand the headline situation within seconds.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the creation/configuration of a KPI visualization and its placement on the dashboard.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 8: Create a Trend Chart</div>
+<div class="content">
+<p>Use a line chart when the primary question is how an indicator changes over time.</p>
+<div class="action"><strong>Action:</strong> Open Data Visualizer → Select the indicator → Select Period → Select Organisation Unit → Choose Line Chart → Save.</div>
+<div class="example">
+<strong>Example:</strong> Confirmed malaria cases by month, January 2025–December 2026.
+</div>
+<div class="result"><strong>Expected result:</strong> The chart shows the temporal pattern and makes increases, decreases and seasonal peaks easier to identify.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the Data Visualizer screenshot showing the trend chart configuration.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 9: Create a District Comparison Chart</div>
+<div class="content">
+<p>Use a bar/column chart when comparing multiple districts for the same indicator and period.</p>
+<div class="action"><strong>Action:</strong> Select the indicator → Select districts/organisation units → Select period → Choose Bar/Column Chart → Save.</div>
+<div class="example">
+<strong>Example:</strong> Malaria incidence by district for the selected year.
+</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the district comparison visualization configuration.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 10: Create an Interactive Map</div>
+<div class="content">
+<p>Use maps when geographic variation is important.</p>
+<div class="action"><strong>Action:</strong> Open Maps → Select the indicator → Select the organisation-unit level → Configure the map → Save.</div>
+<p>Choose the organisation-unit level that matches the analytical question, such as district or chiefdom.</p>
+<div class="result"><strong>Expected result:</strong> The map communicates geographic variation without requiring users to read a large table.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the DHIS2 Maps configuration screen and the resulting map.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 11: Configure Map Classification</div>
+<div class="content">
+<p>Choose meaningful classes for the map rather than accepting an inappropriate default classification.</p>
+<div class="example">
+<strong>Example categories:</strong><br>
+&lt;25 | 25–50 | 50–75 | &gt;75
+</div>
+<p>For percentage indicators, make sure the class breaks make sense for the programme's interpretation. For incidence or counts, use breaks appropriate to the distribution and decision context.</p>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the map layer/classification configuration screen.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 12: Add a Data Table</div>
+<div class="content">
+<p>Use a table when users need exact values rather than only a visual summary.</p>
+<div class="example">
+District | Cases | Incidence | Positivity | Treatment<br>
+Bo | 8,420 | 312 | 64% | 92%<br>
+Bombali | 6,820 | 288 | 61% | 89%
+</div>
+<div class="action"><strong>Action:</strong> Create a table visualization with the dimensions and indicators required for programme review.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the table visualization configuration and resulting table.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 13: Add Dashboard Filters</div>
+<div class="content">
+<p>Filters are what transform a static dashboard into an interactive analytical tool.</p>
+<div class="example">
+<strong>Recommended filters:</strong><br>
+Organisation Unit<br>
+Period<br>
+Age Group<br>
+Sex<br>
+Programme/Intervention dimension where applicable
+</div>
+<div class="action"><strong>Action:</strong> Add dashboard filters using the filter controls supported by your DHIS2 version.</div>
+<div class="result"><strong>Expected result:</strong> Users can change the analytical context without creating a separate dashboard for every district or period.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the dashboard filter configuration screen.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 14: Add an Organisation Unit Filter</div>
+<div class="content">
+<p>Allow users to move from national to district or facility analysis where the organisation-unit hierarchy and permissions support it.</p>
+<div class="action"><strong>Action:</strong> Add/select the Organisation Unit filter and choose the appropriate level or hierarchy.</div>
+<div class="example">
+Sierra Leone → District → Chiefdom → Facility
+</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the organisation-unit filter in the dashboard.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 15: Add a Period Filter</div>
+<div class="content">
+<p>Allow users to change the reporting period without redesigning the dashboard.</p>
+<div class="action"><strong>Action:</strong> Add a Period filter and test monthly, quarterly and annual selections as appropriate for the dashboard.</div>
+<div class="result"><strong>Expected result:</strong> Dashboard visualizations update to reflect the selected reporting period where supported by their configuration.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the period-filter configuration and resulting dashboard.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 16: Organise Visualizations Into Logical Rows</div>
+<div class="content">
+<p>Arrange visualizations according to the user's analytical workflow.</p>
+<pre>ROW 1 — HEADLINE KPIs
+Cases | Tested | Positivity | Treatment
+
+ROW 2 — CURRENT SITUATION
+Trend | Map
+
+ROW 3 — PERFORMANCE
+District comparison | Target vs achievement
+
+ROW 4 — DETAILED REVIEW
+Table | Data quality
+
+ROW 5 — PROGRAMME ACTIONS
+Intervention gaps | Facilities requiring follow-up</pre>
+<div class="action"><strong>Design rule:</strong> Avoid a dashboard that looks like a random collection of charts.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the dashboard layout after arranging the rows.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 17: Create Target vs Achievement</div>
+<div class="content">
+<p>Where approved targets exist, compare actual performance with the target.</p>
+<div class="example">
+<strong>Example:</strong><br>
+ITN coverage: 92% actual vs 90% target<br>
+ACT treatment: 88% actual vs 95% target
+</div>
+<p>Use a visualization that makes the gap visible without overwhelming the user.</p>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the target-versus-achievement visualization.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 18: Create a Data Quality Panel</div>
+<div class="content">
+<p>A powerful programme dashboard should show whether the underlying data can be trusted.</p>
+<div class="example">
+<strong>DATA QUALITY</strong><br>
+Reporting completeness: 94%<br>
+Facilities missing reports: 12<br>
+Late reports: 8<br>
+Facilities below 80% completeness: 6
+</div>
+<div class="action"><strong>Action:</strong> Create approved data-quality indicators/visualizations and place them in a dedicated dashboard area.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the data-quality visualization/panel.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 19: Create an Intervention Performance Area</div>
+<div class="content">
+<p>For an NMCP dashboard, separate disease burden from intervention performance.</p>
+<div class="example">
+<strong>INTERVENTION COVERAGE</strong><br>
+ITN distribution/coverage<br>
+IRS coverage<br>
+SMC coverage<br>
+IPTp coverage<br>
+Malaria vaccine coverage
+</div>
+<div class="action"><strong>Design:</strong> Use a consistent visualization for each intervention so users can compare coverage easily.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the intervention-performance dashboard section.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 20: Create a Drill-Down Workflow</div>
+<div class="content">
+<p>Design the dashboard so users can move from a national overview toward the areas requiring attention.</p>
+<pre>NATIONAL
+   ↓
+DISTRICT
+   ↓
+CHIEFDOM
+   ↓
+FACILITY
+   ↓
+DETAILED INDICATORS</pre>
+<p>The exact drill-down behavior depends on the DHIS2 applications and configuration available in your version. Where direct linked navigation is not available, use organisation-unit filters and linked analytical views.</p>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert screenshots showing the national view and the selected lower-level view.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 21: Add Interpretation/Instruction Text</div>
+<div class="content">
+<p>Use short text boxes to tell users what they are looking at.</p>
+<div class="example">
+<strong>HOW TO READ THIS DASHBOARD</strong><br>
+Use the filters above to select a reporting period and organisation unit.
+The map shows district-level malaria burden. The trend chart shows monthly
+changes. The data-quality panel identifies reporting gaps.
+</div>
+<div class="action"><strong>Design rule:</strong> Keep instructions short. Do not turn the dashboard into a report full of paragraphs.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the dashboard with the instruction panel.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 22: Apply a Consistent Visual Design</div>
+<div class="content">
+<div class="table-wrap"><table>
+<tr><th>Dashboard element</th><th>Recommended design</th></tr>
+<tr><td>Main title</td><td>Strong primary blue, short title</td></tr>
+<tr><td>KPI cards</td><td>White cards, large number, short label</td></tr>
+<tr><td>Section headings</td><td>Consistent blue heading style</td></tr>
+<tr><td>Filters</td><td>One row where possible</td></tr>
+<tr><td>Charts</td><td>One question per chart</td></tr>
+<tr><td>Maps</td><td>Clear legend and meaningful classes</td></tr>
+<tr><td>Warnings</td><td>Reserved for genuine issues</td></tr>
+</table></div>
+<div class="action"><strong>Design rule:</strong> Consistency is more important than decoration.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot of the dashboard after visual styling.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 23: Avoid Dashboard Overload</div>
+<div class="content">
+<p>Do not place every available indicator on one page.</p>
+<ul>
+<li>Remove duplicate charts.</li>
+<li>Combine related information where appropriate.</li>
+<li>Move detailed tables below headline information.</li>
+<li>Use separate dashboards or sections for different programme questions.</li>
+<li>Keep the first screen focused on the most important information.</li>
+</ul>
+<div class="result"><strong>Expected result:</strong> A user can identify the main situation quickly and then explore details as needed.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the refined dashboard after removing unnecessary visualizations.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 24: Create Multiple Dashboard Pages</div>
+<div class="content">
+<p>For a larger NMCP implementation, separate analytical purposes rather than forcing everything into one dashboard.</p>
+<div class="example">
+<strong>Dashboard 1:</strong> Malaria Situation Overview<br>
+<strong>Dashboard 2:</strong> Intervention Performance<br>
+<strong>Dashboard 3:</strong> Epidemiological Trends<br>
+<strong>Dashboard 4:</strong> Data Quality<br>
+<strong>Dashboard 5:</strong> Facility Performance
+</div>
+<div class="action"><strong>Design principle:</strong> Each dashboard should answer a coherent set of questions.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the DHIS2 dashboard list/navigation showing the dashboard pages.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 25: Configure Dashboard Sharing</div>
+<div class="content">
+<p>Share the dashboard with the intended users and user groups.</p>
+<div class="action"><strong>Action:</strong> Open the dashboard sharing/access settings and assign the appropriate user groups.</div>
+<p>Also verify that users have access to the underlying indicators, data and organisation units required by the dashboard.</p>
+<div class="result"><strong>Expected result:</strong> Intended users can open the dashboard and see the data they are authorised to view.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the dashboard sharing/access screen.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 26: Test Every Filter</div>
+<div class="content">
+<p>Test the dashboard systematically.</p>
+<div class="table-wrap"><table>
+<tr><th>Test</th><th>Expected behavior</th></tr>
+<tr><td>Change period</td><td>Visualizations update to the selected period where applicable.</td></tr>
+<tr><td>Change district</td><td>Relevant visualizations update to the selected organisation unit.</td></tr>
+<tr><td>Change indicator</td><td>Visualization reflects the selected measure.</td></tr>
+<tr><td>Change map level</td><td>Geographic display matches the selected level.</td></tr>
+<tr><td>No data</td><td>User receives a clear empty/no-data state.</td></tr>
+</table></div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert screenshots demonstrating filter changes and updated visualizations.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 27: Test Data Accuracy</div>
+<div class="content">
+<p>Compare dashboard values against known source values.</p>
+<div class="example">
+<strong>Example:</strong><br>
+Source data: 220 tests, 150 positive<br>
+Dashboard positivity: 150 ÷ 220 × 100 = 68.2%
+</div>
+<p>Check at national, district and facility levels as appropriate.</p>
+<div class="result"><strong>Expected result:</strong> Dashboard figures agree with validated source/analytics results.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the dashboard and source-data comparison screenshot.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 28: Test Performance</div>
+<div class="content">
+<p>Large dashboards can become slow when they contain many complex visualizations.</p>
+<ul>
+<li>Remove unnecessary visualizations.</li>
+<li>Avoid excessive numbers of maps on one page.</li>
+<li>Use appropriate periods and organisation-unit levels.</li>
+<li>Test dashboard loading time with realistic user permissions.</li>
+<li>Test during normal system load.</li>
+</ul>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the dashboard loading/performance test or final optimized page.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 29: Test Mobile and Different Screen Sizes</div>
+<div class="content">
+<p>If users will access the dashboard on laptops, tablets or phones, test the layout on each relevant screen size.</p>
+<p>Make sure KPI cards remain readable, filters are usable and charts do not become excessively compressed.</p>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert screenshots of the dashboard on the relevant screen sizes.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 30: Final Dashboard Approval</div>
+<div class="content">
+<p>Before deployment, perform a formal review of the dashboard.</p>
+<ul>
+<li>☐ Purpose is clearly defined.</li>
+<li>☐ Indicators use approved programme definitions.</li>
+<li>☐ KPI cards are meaningful.</li>
+<li>☐ Trends use appropriate time periods.</li>
+<li>☐ Maps use appropriate organisation-unit levels.</li>
+<li>☐ Tables provide necessary detail.</li>
+<li>☐ Filters work correctly.</li>
+<li>☐ Organisation-unit access is correct.</li>
+<li>☐ Data-quality information is included where needed.</li>
+<li>☐ Dashboard values have been verified.</li>
+<li>☐ Dashboard performance is acceptable.</li>
+<li>☐ Sharing/access is correct.</li>
+<li>☐ Users have tested the dashboard.</li>
+</ul>
+<div class="result"><strong>Final result:</strong> The dashboard is ready for user acceptance and controlled programme deployment.</div>
+<div class="screenshot"><div><strong>📸 INSERT FINAL SCREENSHOT HERE</strong>Insert the approved final dashboard screenshot here.</div></div>
+</div></div>
+
+<div class="note">
+<strong>Powerful dashboard design principle:</strong> The strongest DHIS2 dashboard is not the one with the most charts. It is the one that lets a programme manager move quickly from <strong>“What is happening?”</strong> → <strong>“Where is it happening?”</strong> → <strong>“Why might it be happening?”</strong> → <strong>“Where should I investigate?”</strong>, while keeping the underlying definitions and data quality visible.
+</div>
+
+<nav class="topic-nav" aria-label="Topics"><a class="prev" href="DHIS2_File_3_Create_Indicators_HTML_Guide.html"><small>Previous topic</small>&#8592; 3. Create indicators</a><a class="next" href="index.html"><small>All done</small>Hackathon home &#8594;</a></nav>
+<div class="footer">DHIS2 Interactive Dashboards — Powerful Design & Implementation Guide</div>
+</div>
+</body>
+</html>

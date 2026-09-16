@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHIS2 Data Entry Form - Design Guide</title>
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#263238;line-height:1.6}
+.container{max-width:1050px;margin:auto;padding:35px 24px 60px}
+.hero{background:linear-gradient(135deg,#0d47a1,#1976d2);color:#fff;padding:38px;border-radius:14px;margin-bottom:28px}
+.hero h1{margin:0 0 8px;font-size:31px}.hero p{margin:0;opacity:.95}
+.note{background:#fff8e1;border-left:5px solid #ffb300;padding:17px 20px;border-radius:8px;margin:18px 0}
+.step{background:#fff;border-radius:12px;margin:25px 0;box-shadow:0 3px 12px rgba(0,0,0,.06);overflow:hidden}
+.step-title{background:#1565c0;color:#fff;padding:15px 21px;font-size:20px;font-weight:700}
+.content{padding:22px}
+.action{background:#e3f2fd;border-left:4px solid #1976d2;padding:12px 15px;border-radius:6px;margin:12px 0}
+.result{background:#e8f5e9;border-left:4px solid #43a047;padding:12px 15px;border-radius:6px;margin:14px 0}
+.design{background:#f7f9fc;border:1px solid #dce3ea;padding:16px;border-radius:8px;margin:14px 0}
+.screenshot{min-height:260px;border:2px dashed #90a4ae;background:#fafafa;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;margin-top:20px;padding:20px;box-sizing:border-box;color:#607d8b}
+.screenshot strong{display:block;color:#455a64;font-size:17px;margin-bottom:6px}
+pre{white-space:pre-wrap;background:#263238;color:#f5f5f5;padding:18px;border-radius:8px;overflow:auto;font-size:13px}
+table{width:100%;border-collapse:collapse;background:#fff;margin:15px 0}
+th,td{border:1px solid #dfe4e8;padding:10px;text-align:left}
+th{background:#1565c0;color:#fff}
+.swatch{width:55px;height:28px;border-radius:5px;border:1px solid #ddd}
+.footer{text-align:center;color:#607d8b;margin-top:35px}
+</style>
+
+<style id="hackathon-dark">
+/* AMMnet DHIS2 Hackathon dark theme, colour blind safe (Okabe and Ito) */
+:root{
+  --bg:#0d1117; --surface:#161b22; --raised:#21262d; --line:#30363d;
+  --text:#e6edf3; --muted:#9aa7b4; --focus:#F0E442;
+  --info:#56B4E9; --ok:#009E73; --warn:#E69F00; --accent:#56B4E9;
+  --blue:#56B4E9; --blue2:#21262d; --blue3:#56B4E9; --light:#161b22; --green:#009E73;
+}
+body.topic-2{--accent:#E69F00} body.topic-3{--accent:#009E73} body.topic-4{--accent:#CC79A7}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif}
+a{color:var(--info)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.back-pill{position:sticky;top:10px;z-index:20;display:inline-block;margin:14px 0 0 16px;
+  background:var(--raised);color:var(--text);border:1px solid var(--line);border-radius:999px;
+  padding:7px 16px;font-size:14px;font-weight:600;text-decoration:none}
+.back-pill:hover{border-color:var(--accent)}
+.container{padding-top:18px}
+
+.header,.hero{background:var(--surface);color:var(--text);border:1px solid var(--line);
+  border-left:6px solid var(--accent);box-shadow:none}
+.header h1,.hero h1{color:#fff}
+.header p,.hero p{color:var(--muted);opacity:1}
+.topic-chip{display:inline-block;margin-bottom:10px;font-size:13px;font-weight:700;color:var(--accent);
+  border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:3px 12px}
+
+.intro,.note,.checklist{background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px}
+.intro{border-left:5px solid var(--info)}
+.note{border-left:5px solid var(--warn)}
+.checklist{border-top:4px solid var(--accent)}
+.checklist h2{color:#fff}
+
+.step{background:var(--surface);border:1px solid var(--line);box-shadow:none}
+.step-header,.step-title{background:var(--raised);color:#fff;border-bottom:1px solid var(--line);
+  border-left:6px solid var(--accent)}
+.step-body h3,.content h3{color:var(--accent)}
+
+.click-path,.action{background:rgba(86,180,233,.10);color:var(--text);border:0;border-left:4px solid var(--info)}
+.click-path strong,.action strong{color:var(--info)}
+.result{background:rgba(0,158,115,.12);color:var(--text);border-left:4px solid var(--ok)}
+.result strong{color:#3fc79a}
+.enter-box,.example,.design{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+
+.screenshot{background:var(--bg);border:2px dashed #4a5563;color:var(--muted)}
+.screenshot strong{color:var(--text)}
+.screenshot img{max-width:100%;height:auto;border-radius:6px}
+
+code{background:var(--raised);color:#F0E442;border:1px solid var(--line)}
+pre{background:#010409;color:#e6edf3;border:1px solid var(--line)}
+pre code{background:none;border:0;color:inherit}
+
+.table-wrap{overflow-x:auto;margin:15px 0}
+.table-wrap table{margin:0}
+table{background:var(--surface);color:var(--text)}
+th,td{border:1px solid var(--line)}
+th{background:var(--raised);color:#fff;border-bottom:2px solid var(--accent)}
+.swatch{border:1px solid #8b949e}
+
+/* dashboard sketch in topic 4 */
+.dashboard{background:var(--bg);border:1px solid var(--line)}
+.topbar{background:var(--raised);color:#fff;border-left:4px solid var(--accent)}
+.filter{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+.card,.panel{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+.card small{color:var(--muted)}
+.bar{background:var(--raised)}
+.bar span{background:var(--accent)}
+
+.topic-nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:34px}
+.topic-nav a{flex:1 1 220px;background:var(--surface);border:1px solid var(--line);border-radius:8px;
+  padding:12px 16px;color:var(--text);text-decoration:none}
+.topic-nav a:hover{border-color:var(--accent)}
+.topic-nav small{display:block;color:var(--muted)}
+.topic-nav .next{text-align:right}
+.footer{color:var(--muted)}
+@media (max-width:640px){
+  .container{padding-left:14px;padding-right:14px}
+  .header,.hero{padding:22px}
+  .header h1,.hero h1{font-size:24px}
+  .step-header,.step-title{font-size:17px}
+}
+</style>
+</head>
+<body class="topic-2">
+<a class="back-pill" href="index.html" onclick="if(document.referrer&&/index\.html$|\/$/.test(document.referrer.split('?')[0])&&history.length>1){history.back();return false;}">&#8592; Back to the hackathon home</a>
+<div class="container">
+
+<div class="hero">
+<span class="topic-chip">Topic 2 of 4</span>
+<h1>DHIS2 Data Entry Form — Visual Design Guide</h1>
+<p>Step-by-step guide for designing a professional, colour-coded custom web data-entry form.</p>
+</div>
+
+<div class="note">
+<strong>How to use this guide:</strong> Complete the configuration from File 1 first. Then use this guide to design the appearance. After every step, insert a screenshot from your own DHIS2 system in the marked area.
+</div>
+
+<div class="step">
+<div class="step-title">Step 1: Open the Data Set</div>
+<div class="content">
+<p>Open the dataset that you created in the first guide.</p>
+<div class="action"><strong>Click:</strong> Maintenance / Metadata Management → Data Sets → Select your dataset</div>
+<div class="result"><strong>Expected result:</strong> You can see the dataset configuration and its options.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the DHIS2 Data Set page and the dataset options menu.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 2: Open the Data Entry Form Designer</div>
+<div class="content">
+<p>Open the option used to design the custom data-entry form.</p>
+<div class="action"><strong>Click:</strong> Data Set → Options → Design Data Entry Form</div>
+<p>This opens the DHIS2 form editor. The exact menu names can vary slightly by DHIS2 version.</p>
+<div class="result"><strong>Expected result:</strong> The custom form/WYSIWYG editor opens.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the Design Data Entry Form option and the form designer.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 3: Understand the Form Designer</div>
+<div class="content">
+<p>Before adding colours, identify the main parts of the editor:</p>
+<ul>
+<li>Editing area</li><li>Formatting toolbar</li><li>Source/HTML mode</li><li>DHIS2 data-element insertion controls</li><li>Save/update controls</li>
+</ul>
+<div class="action"><strong>Action:</strong> Open Source/HTML mode if your DHIS2 version provides it.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the complete form designer with the toolbar and Source/HTML option.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 4: Define the Colour Palette</div>
+<div class="content">
+<p>Use a small, consistent palette. The following is designed for a professional NMCP/HMIS interface.</p>
+<div class="table-wrap"><table>
+<tr><th>Purpose</th><th>Colour</th><th>Hex</th></tr>
+<tr><td>Primary header</td><td><div class="swatch" style="background:#1565C0"></div></td><td>#1565C0</td></tr>
+<tr><td>Section header</td><td><div class="swatch" style="background:#1976D2"></div></td><td>#1976D2</td></tr>
+<tr><td>Light information panel</td><td><div class="swatch" style="background:#E3F2FD"></div></td><td>#E3F2FD</td></tr>
+<tr><td>Page background</td><td><div class="swatch" style="background:#F4F7FB"></div></td><td>#F4F7FB</td></tr>
+<tr><td>Calculated/read-only</td><td><div class="swatch" style="background:#F5F5F5"></div></td><td>#F5F5F5</td></tr>
+<tr><td>Warning</td><td><div class="swatch" style="background:#FFF3E0"></div></td><td>#FFF3E0</td></tr>
+<tr><td>Error</td><td><div class="swatch" style="background:#FFEBEE"></div></td><td>#FFEBEE</td></tr>
+<tr><td>Success</td><td><div class="swatch" style="background:#E8F5E9"></div></td><td>#E8F5E9</td></tr>
+</table></div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show your selected colour palette or the DHIS2 interface where formatting is being applied.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 5: Create the Main Form Header</div>
+<div class="content">
+<p>The first part of the form should clearly identify the reporting programme and form.</p>
+<pre>┌─────────────────────────────────────────────────────┐
+│  NMCP MALARIA MONTHLY REPORT                        │
+│  Routine Malaria Service Reporting                  │
+└─────────────────────────────────────────────────────┘</pre>
+<p>Use the primary colour <strong>#1565C0</strong> for the header background and white text.</p>
+<div class="action"><strong>Design:</strong> Add the programme/form title at the top. Keep the title short and prominent.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the form header being created or the resulting header.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 6: Design the Reporting Information Section</div>
+<div class="content">
+<p>Create a clear first section containing the information needed to identify the report.</p>
+<pre>REPORTING INFORMATION
+────────────────────────────────────────
+Organisation Unit:   [ Bo Government Hospital ▼ ]
+Reporting Period:    [ September 2026 ▼ ]</pre>
+<div class="action"><strong>Design:</strong> Use a blue section heading and a light-blue instruction panel underneath it.</div>
+<div class="result"><strong>Design principle:</strong> Users should immediately know which facility and reporting period they are entering.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the Reporting Information section in the DHIS2 designer or final form.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 7: Design the Malaria Testing Section</div>
+<div class="content">
+<p>Create a separate visual block for testing information.</p>
+<pre>MALARIA TESTING
+────────────────────────────────────────
+Suspected malaria cases       [       ]
+RDT tested                    [       ]
+Microscopy tested             [       ]</pre>
+<div class="action"><strong>Design:</strong> Use #1976D2 for the section heading. Keep the input area white and uncluttered.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the Malaria Testing section.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 8: Design the Results Section</div>
+<div class="content">
+<p>Separate results from testing so the reporting flow is obvious.</p>
+<pre>MALARIA RESULTS
+────────────────────────────────────────
+RDT positive                  [       ]
+Microscopy positive           [       ]
+Total confirmed               [       ]</pre>
+<p>If <strong>Total confirmed</strong> is calculated, visually distinguish it from manually entered fields using a light-grey background.</p>
+<div class="action"><strong>Design:</strong> Manual input = white. Calculated/read-only = #F5F5F5.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the Results section and calculated field styling.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 9: Design the Treatment Section</div>
+<div class="content">
+<pre>TREATMENT
+────────────────────────────────────────
+ACT treatment                 [       ]
+Severe malaria treatment      [       ]
+Pre-referral treatment        [       ]</pre>
+<div class="action"><strong>Design:</strong> Keep treatment fields together and use the same section-header style used throughout the form.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the Treatment section.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 10: Design the Outcomes Section</div>
+<div class="content">
+<pre>OUTCOMES
+────────────────────────────────────────
+Malaria deaths                [       ]
+Referrals                     [       ]</pre>
+<div class="action"><strong>Design:</strong> Keep outcomes at the end because they represent the final stage of the reporting workflow.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the Outcomes section.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 11: Add Instruction Panels</div>
+<div class="content">
+<p>Use light-blue information boxes for short instructions.</p>
+<pre>ℹ INFORMATION
+Enter the number of patients tested for malaria
+during the reporting month. Do not include tests
+performed outside the reporting facility.</pre>
+<div class="action"><strong>Design:</strong> Background #E3F2FD; left border #1565C0; short text only.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show an instruction panel in the form.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 12: Add Warning and Error Styling</div>
+<div class="content">
+<p>Do not use red for normal fields. Reserve it for errors.</p>
+<pre>⚠ WARNING
+RDT positive cases cannot exceed the number of
+RDT tests performed.</pre>
+<p>Use pale orange for warnings and pale red for actual validation errors.</p>
+<div class="action"><strong>Design:</strong> Warning #FFF3E0; Error #FFEBEE.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show a validation warning/error in the DHIS2 form.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 13: Add a Summary Area</div>
+<div class="content">
+<p>A summary block can make the form easier to review before completion.</p>
+<pre>REPORT SUMMARY
+────────────────────────────────────────
+Suspected cases             250
+Total tested                220
+Total confirmed             170
+ACT treatment               180
+Malaria deaths                0</pre>
+<div class="action"><strong>Design:</strong> Use a light-grey or light-blue background. Make calculated/summary values visually distinct from input fields.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the summary area.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 14: Design the Bottom Action Area</div>
+<div class="content">
+<p>Keep the final actions together.</p>
+<pre>────────────────────────────────────────────────
+[ Run Validation ]             [ Save ] [ Complete ]</pre>
+<div class="action"><strong>Design:</strong> Keep the action area simple. Do not use multiple competing button colours.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the bottom action area.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 15: Insert the DHIS2 Data Elements</div>
+<div class="content">
+<p>Now place the actual DHIS2-linked data elements into the designed sections.</p>
+<div class="action"><strong>Important:</strong> Insert the fields using the DHIS2 form designer's data-element insertion mechanism. Do not replace them with ordinary HTML input elements.</div>
+<ul>
+<li>Insert Suspected Cases under Malaria Testing.</li>
+<li>Insert RDT Tested and Microscopy Tested underneath it.</li>
+<li>Insert RDT Positive and Microscopy Positive under Results.</li>
+<li>Insert ACT and severe malaria fields under Treatment.</li>
+<li>Insert deaths and referrals under Outcomes.</li>
+</ul>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Show the actual DHIS2 data elements inserted into the custom form.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 16: Review the Complete Design</div>
+<div class="content">
+<p>The finished web form should have a clear hierarchy:</p>
+<pre>NMCP MALARIA MONTHLY REPORT
+        ↓
+REPORTING INFORMATION
+        ↓
+MALARIA TESTING
+        ↓
+MALARIA RESULTS
+        ↓
+TREATMENT
+        ↓
+OUTCOMES
+        ↓
+SUMMARY
+        ↓
+VALIDATE / SAVE / COMPLETE</pre>
+<div class="result"><strong>Expected result:</strong> The form looks like one coherent application rather than a collection of unrelated fields.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the full screenshot of your final DHIS2 form here.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 17: Test Desktop Display</div>
+<div class="content">
+<ul>
+<li>Check the form at normal browser zoom.</li>
+<li>Check that labels are readable.</li>
+<li>Check that fields do not overlap.</li>
+<li>Check that section headers are consistent.</li>
+<li>Check that long labels wrap correctly.</li>
+</ul>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a full-screen desktop screenshot of the final form.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 18: Test Validation and User Experience</div>
+<div class="content">
+<p>Enter both valid and invalid values and verify that the visual design does not hide validation messages.</p>
+<div class="action"><strong>Example:</strong> RDT Tested = 100; RDT Positive = 150 → validation should identify the inconsistency.</div>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert the screenshot showing the validation message.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 19: Test the Form With Users</div>
+<div class="content">
+<p>Ask a small number of intended data-entry users to complete the form without explaining every field to them.</p>
+<ul>
+<li>Can they find the reporting period?</li>
+<li>Do they understand what each section means?</li>
+<li>Can they identify which fields require entry?</li>
+<li>Can they understand validation messages?</li>
+<li>Can they complete the report without unnecessary scrolling?</li>
+</ul>
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot of the form during user testing.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 20: Final Approval Version</div>
+<div class="content">
+<p>Once the form has been tested and approved, capture the final version for your implementation documentation.</p>
+<div class="result"><strong>Final deliverable:</strong> A professional, structured DHIS2 web data-entry form with consistent colours, clear sections, instructions, validation feedback and an easy reporting flow.</div>
+<div class="screenshot"><div><strong>📸 INSERT FINAL SCREENSHOT HERE</strong>Insert the approved final DHIS2 form screenshot.</div></div>
+</div></div>
+
+<div class="note">
+<strong>Compatibility note:</strong> This visual custom-form approach is intended primarily for DHIS2 web Data Entry. If the same reporting workflow must be used in Android Capture, build and test a section-form version as well because custom forms are not supported in the Android data-entry workflow.
+</div>
+
+<nav class="topic-nav" aria-label="Topics"><a class="prev" href="DHIS2_File_1_Step_by_Step_HTML_Guide.html"><small>Previous topic</small>&#8592; 1. Build the data entry form</a><a class="next" href="DHIS2_File_3_Create_Indicators_HTML_Guide.html"><small>Next topic</small>3. Create indicators &#8594;</a></nav>
+<div class="footer">DHIS2 Data Entry Form — Visual Design Guide</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHIS2 Indicators - Step-by-Step Guide</title>
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#263238;line-height:1.6}
+.container{max-width:1050px;margin:auto;padding:35px 24px 60px}
+.hero{background:linear-gradient(135deg,#0d47a1,#1976d2);color:#fff;padding:38px;border-radius:14px;margin-bottom:28px}
+.hero h1{margin:0 0 8px;font-size:31px}.hero p{margin:0;opacity:.95}
+.note{background:#fff8e1;border-left:5px solid #ffb300;padding:17px 20px;border-radius:8px;margin:18px 0}
+.step{background:#fff;border-radius:12px;margin:25px 0;box-shadow:0 3px 12px rgba(0,0,0,.06);overflow:hidden}
+.step-title{background:#1565c0;color:#fff;padding:15px 21px;font-size:20px;font-weight:700}
+.content{padding:22px}
+.content h3{color:#1565c0}
+.action{background:#e3f2fd;border-left:4px solid #1976d2;padding:12px 15px;border-radius:6px;margin:12px 0}
+.result{background:#e8f5e9;border-left:4px solid #43a047;padding:12px 15px;border-radius:6px;margin:14px 0}
+.example{background:#f7f9fc;border:1px solid #dce3ea;padding:16px;border-radius:8px;margin:14px 0}
+.screenshot{min-height:260px;border:2px dashed #90a4ae;background:#fafafa;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;margin-top:20px;padding:20px;box-sizing:border-box;color:#607d8b}
+.screenshot strong{display:block;color:#455a64;font-size:17px;margin-bottom:6px}
+pre{white-space:pre-wrap;background:#263238;color:#f5f5f5;padding:18px;border-radius:8px;overflow:auto;font-size:13px}
+table{width:100%;border-collapse:collapse;background:#fff;margin:15px 0}
+th,td{border:1px solid #dfe4e8;padding:10px;text-align:left}
+th{background:#1565c0;color:#fff}
+code{background:#f1f3f4;padding:2px 6px;border-radius:4px}
+.footer{text-align:center;color:#607d8b;margin-top:35px}
+</style>
+
+<style id="hackathon-dark">
+/* AMMnet DHIS2 Hackathon dark theme, colour blind safe (Okabe and Ito) */
+:root{
+  --bg:#0d1117; --surface:#161b22; --raised:#21262d; --line:#30363d;
+  --text:#e6edf3; --muted:#9aa7b4; --focus:#F0E442;
+  --info:#56B4E9; --ok:#009E73; --warn:#E69F00; --accent:#56B4E9;
+  --blue:#56B4E9; --blue2:#21262d; --blue3:#56B4E9; --light:#161b22; --green:#009E73;
+}
+body.topic-2{--accent:#E69F00} body.topic-3{--accent:#009E73} body.topic-4{--accent:#CC79A7}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif}
+a{color:var(--info)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.back-pill{position:sticky;top:10px;z-index:20;display:inline-block;margin:14px 0 0 16px;
+  background:var(--raised);color:var(--text);border:1px solid var(--line);border-radius:999px;
+  padding:7px 16px;font-size:14px;font-weight:600;text-decoration:none}
+.back-pill:hover{border-color:var(--accent)}
+.container{padding-top:18px}
+
+.header,.hero{background:var(--surface);color:var(--text);border:1px solid var(--line);
+  border-left:6px solid var(--accent);box-shadow:none}
+.header h1,.hero h1{color:#fff}
+.header p,.hero p{color:var(--muted);opacity:1}
+.topic-chip{display:inline-block;margin-bottom:10px;font-size:13px;font-weight:700;color:var(--accent);
+  border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:3px 12px}
+
+.intro,.note,.checklist{background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px}
+.intro{border-left:5px solid var(--info)}
+.note{border-left:5px solid var(--warn)}
+.checklist{border-top:4px solid var(--accent)}
+.checklist h2{color:#fff}
+
+.step{background:var(--surface);border:1px solid var(--line);box-shadow:none}
+.step-header,.step-title{background:var(--raised);color:#fff;border-bottom:1px solid var(--line);
+  border-left:6px solid var(--accent)}
+.step-body h3,.content h3{color:var(--accent)}
+
+.click-path,.action{background:rgba(86,180,233,.10);color:var(--text);border:0;border-left:4px solid var(--info)}
+.click-path strong,.action strong{color:var(--info)}
+.result{background:rgba(0,158,115,.12);color:var(--text);border-left:4px solid var(--ok)}
+.result strong{color:#3fc79a}
+.enter-box,.example,.design{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+
+.screenshot{background:var(--bg);border:2px dashed #4a5563;color:var(--muted)}
+.screenshot strong{color:var(--text)}
+.screenshot img{max-width:100%;height:auto;border-radius:6px}
+
+code{background:var(--raised);color:#F0E442;border:1px solid var(--line)}
+pre{background:#010409;color:#e6edf3;border:1px solid var(--line)}
+pre code{background:none;border:0;color:inherit}
+
+.table-wrap{overflow-x:auto;margin:15px 0}
+.table-wrap table{margin:0}
+table{background:var(--surface);color:var(--text)}
+th,td{border:1px solid var(--line)}
+th{background:var(--raised);color:#fff;border-bottom:2px solid var(--accent)}
+.swatch{border:1px solid #8b949e}
+
+/* dashboard sketch in topic 4 */
+.dashboard{background:var(--bg);border:1px solid var(--line)}
+.topbar{background:var(--raised);color:#fff;border-left:4px solid var(--accent)}
+.filter{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+.card,.panel{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+.card small{color:var(--muted)}
+.bar{background:var(--raised)}
+.bar span{background:var(--accent)}
+
+.topic-nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:34px}
+.topic-nav a{flex:1 1 220px;background:var(--surface);border:1px solid var(--line);border-radius:8px;
+  padding:12px 16px;color:var(--text);text-decoration:none}
+.topic-nav a:hover{border-color:var(--accent)}
+.topic-nav small{display:block;color:var(--muted)}
+.topic-nav .next{text-align:right}
+.footer{color:var(--muted)}
+@media (max-width:640px){
+  .container{padding-left:14px;padding-right:14px}
+  .header,.hero{padding:22px}
+  .header h1,.hero h1{font-size:24px}
+  .step-header,.step-title{font-size:17px}
+}
+</style>
+</head>
+<body class="topic-3">
+<a class="back-pill" href="index.html" onclick="if(document.referrer&&/index\.html$|\/$/.test(document.referrer.split('?')[0])&&history.length>1){history.back();return false;}">&#8592; Back to the hackathon home</a>
+<div class="container">
+
+<div class="hero">
+<span class="topic-chip">Topic 3 of 4</span>
+<h1>DHIS2 Indicators</h1>
+<p>Step-by-Step Guide: Creating, Configuring and Testing Indicators</p>
+</div>
+
+<div class="note">
+<strong>Purpose of this guide:</strong> This guide explains how to create an indicator in DHIS2 from the underlying data elements through testing and visualization. After each step, insert a screenshot from your own DHIS2 instance in the marked area.
+</div>
+
+<div class="step">
+<div class="step-title">Step 1: Understand What an Indicator Is</div>
+<div class="content">
+<p>An indicator in DHIS2 is a calculated value derived from one or more data elements. Indicators are commonly used for rates, percentages, ratios and coverage measures.</p>
+
+<pre>INDICATOR
+   │
+   ├── Numerator
+   │       ↓
+   │   Data Element
+   │
+   ├── Denominator
+   │       ↓
+   │   Data Element
+   │
+   └── Factor
+           ↓
+        × 100</pre>
+
+<h3>Example</h3>
+<div class="example">
+<strong>Indicator:</strong> Malaria Testing Rate (%)<br><br>
+<strong>Numerator:</strong> Number of malaria tests performed<br>
+<strong>Denominator:</strong> Number of suspected malaria cases<br>
+<strong>Factor:</strong> 100
+</div>
+
+<div class="result"><strong>Expected result:</strong> You understand the numerator, denominator and factor required before creating the indicator.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot introducing the Indicators area or indicator concept in your DHIS2 training environment.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 2: Check the Data Elements First</div>
+<div class="content">
+<p>Before creating an indicator, confirm that the data elements needed for the calculation already exist.</p>
+
+<div class="action"><strong>Click:</strong> Maintenance / Metadata Management → Data Elements</div>
+
+<h3>For the malaria testing example, check for:</h3>
+<ul>
+<li>Malaria Suspected Cases</li>
+<li>Malaria Tests Performed</li>
+</ul>
+
+<p>If the required data element does not exist, create it before proceeding with the indicator.</p>
+
+<div class="result"><strong>Expected result:</strong> Both numerator and denominator data elements are available.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the relevant data elements in DHIS2.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 3: Open Indicators</div>
+<div class="content">
+<p>Open the Indicators section in the DHIS2 Maintenance/Metadata Management application.</p>
+
+<div class="action"><strong>Click:</strong> Maintenance / Metadata Management → Indicators</div>
+
+<p>Depending on your DHIS2 version, the navigation and menu names may differ slightly.</p>
+
+<div class="result"><strong>Expected result:</strong> The Indicators list is displayed.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing where Indicators is located and the Indicators list.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 4: Create an Indicator Type</div>
+<div class="content">
+<p>Some DHIS2 versions use Indicator Types to define how an indicator is expressed, particularly the factor used for percentage or rate indicators.</p>
+
+<div class="action"><strong>Click:</strong> Indicator Types → + New</div>
+
+<div class="example">
+<strong>Example indicator type:</strong><br><br>
+Name: Percentage<br>
+Factor: 100
+</div>
+
+<p>For a percentage indicator, the factor is normally <code>100</code>.</p>
+
+<div class="result"><strong>Expected result:</strong> A Percentage indicator type is available for selection when creating indicators.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot of the Indicator Type creation screen.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 5: Start Creating the Indicator</div>
+<div class="content">
+<p>Return to Indicators and start a new indicator.</p>
+
+<div class="action"><strong>Click:</strong> Indicators → + New</div>
+
+<p>The indicator creation form should open.</p>
+
+<div class="result"><strong>Expected result:</strong> You see the fields needed to define the indicator.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot of the Create Indicator screen before entering information.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 6: Enter the Indicator Name</div>
+<div class="content">
+<p>Give the indicator a clear and meaningful name.</p>
+
+<div class="example">
+<strong>Example:</strong><br><br>
+Name: Malaria Testing Rate (%)<br>
+Short Name: Malaria Testing Rate<br>
+Code: MAL_TEST_RATE
+</div>
+
+<h3>Naming principle</h3>
+<p>The name should make it clear what is being measured and, where relevant, include the unit such as %, rate, ratio or coverage.</p>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the name, short name and code fields being completed.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 7: Select the Indicator Type</div>
+<div class="content">
+<p>Select the indicator type that corresponds to the calculation.</p>
+
+<div class="action"><strong>Select:</strong> Percentage</div>
+
+<p>If you created a Percentage indicator type in Step 4, select it here.</p>
+
+<div class="result"><strong>Expected result:</strong> The indicator is configured as a percentage-type indicator.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the Indicator Type selection.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 8: Build the Numerator</div>
+<div class="content">
+<p>The numerator is the value that appears on top of the calculation.</p>
+
+<div class="example">
+<strong>Malaria Testing Rate:</strong><br><br>
+Numerator = Number of malaria tests performed
+</div>
+
+<div class="action"><strong>Action:</strong> Open the numerator expression/data-element selector and select the appropriate data element.</div>
+
+<pre>Numerator
+    =
+Malaria Tests Performed</pre>
+
+<div class="result"><strong>Expected result:</strong> The numerator expression contains the correct data element.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the numerator editor and selected data element.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 9: Build the Denominator</div>
+<div class="content">
+<p>The denominator is the value below the calculation line.</p>
+
+<div class="example">
+<strong>Malaria Testing Rate:</strong><br><br>
+Denominator = Number of suspected malaria cases
+</div>
+
+<div class="action"><strong>Action:</strong> Open the denominator expression/data-element selector and select the correct data element.</div>
+
+<pre>Denominator
+    =
+Malaria Suspected Cases</pre>
+
+<div class="result"><strong>Expected result:</strong> The denominator expression contains the correct data element.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the denominator editor and selected data element.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 10: Set the Factor</div>
+<div class="content">
+<p>The factor converts the ratio into the desired unit.</p>
+
+<div class="table-wrap"><table>
+<tr><th>Indicator type</th><th>Typical factor</th></tr>
+<tr><td>Proportion / percentage</td><td>100</td></tr>
+<tr><td>Rate per 1,000</td><td>1,000</td></tr>
+<tr><td>Rate per 10,000</td><td>10,000</td></tr>
+<tr><td>Rate per 100,000</td><td>100,000</td></tr>
+</table></div>
+
+<div class="example">
+<strong>Example:</strong><br>
+(Malaria Tests Performed ÷ Malaria Suspected Cases) × 100
+</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the factor/indicator-type setting.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 11: Configure Aggregation Operators</div>
+<div class="content">
+<p>Choose the aggregation operator for the numerator and denominator according to the meaning of the underlying data.</p>
+
+<div class="example">
+<strong>Common example:</strong><br><br>
+Numerator aggregation: SUM<br>
+Denominator aggregation: SUM
+</div>
+
+<p>Do not automatically choose SUM for every indicator. Confirm that the aggregation method matches the way the underlying data should be aggregated across organisation units and periods.</p>
+
+<div class="action"><strong>Action:</strong> Review the numerator and denominator aggregation settings before saving.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the aggregation/operator settings.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 12: Review the Complete Indicator Formula</div>
+<div class="content">
+<p>Before saving, review the complete calculation.</p>
+
+<pre>Malaria Testing Rate (%)
+
+                    Malaria Tests Performed
+                    ──────────────────────── × 100
+                    Malaria Suspected Cases</pre>
+
+<div class="example">
+<strong>Example:</strong><br>
+Tests performed = 220<br>
+Suspected cases = 250<br><br>
+Indicator = (220 ÷ 250) × 100 = 88%
+</div>
+
+<div class="result"><strong>Expected result:</strong> The formula produces a meaningful value between 0 and 100% when the denominator is positive.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the completed indicator definition before saving.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 13: Save the Indicator</div>
+<div class="content">
+<p>Review the name, type, numerator, denominator, factor and aggregation settings.</p>
+
+<div class="action"><strong>Click:</strong> Save / Create</div>
+
+<div class="result"><strong>Expected result:</strong> The indicator appears in the Indicators list.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the saved indicator in the Indicators list.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 14: Configure Indicator Sharing</div>
+<div class="content">
+<p>Make sure the appropriate users and user groups can access the indicator.</p>
+
+<div class="action"><strong>Open:</strong> Indicator → Sharing / Access</div>
+
+<p>Configure access according to your implementation's governance requirements.</p>
+
+<div class="result"><strong>Expected result:</strong> Intended users can use the indicator in analytics applications where they have the required permissions.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot of the indicator sharing/access configuration.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 15: Test the Indicator in Data Visualizer</div>
+<div class="content">
+<p>Open Data Visualizer and search for the indicator.</p>
+
+<div class="action"><strong>Click:</strong> Apps → Data Visualizer → Select the indicator</div>
+
+<p>Select an organisation unit and reporting period with known underlying data.</p>
+
+<div class="result"><strong>Expected result:</strong> The indicator returns a calculated value rather than displaying an unexpected blank or error.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot of the indicator selected in Data Visualizer.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 16: Compare the DHIS2 Result With a Manual Calculation</div>
+<div class="content">
+<p>Always manually calculate at least one test value.</p>
+
+<div class="example">
+<strong>Example:</strong><br><br>
+Malaria Tests Performed = 220<br>
+Malaria Suspected Cases = 250<br><br>
+Manual calculation:<br>
+220 ÷ 250 × 100 = 88%
+</div>
+
+<p>Compare the manual result with the value returned by DHIS2.</p>
+
+<div class="result"><strong>Expected result:</strong> The DHIS2 result agrees with the manually calculated value, subject to the configured aggregation and data dimensions.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the DHIS2 result and, if useful, the source data used for the manual check.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 17: Test Zero and Missing Denominators</div>
+<div class="content">
+<p>Test what happens when the denominator is zero or missing.</p>
+
+<div class="example">
+Denominator = 0<br>
+Numerator = 0
+</div>
+
+<p>Review the behavior in your DHIS2 version. A percentage cannot be meaningfully calculated when its denominator is zero.</p>
+
+<div class="action"><strong>Action:</strong> Confirm that your reporting and analytical interpretation handles zero/missing denominators correctly.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the indicator behavior with a zero or missing denominator.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 18: Create Additional Malaria Indicators</div>
+<div class="content">
+<p>Once the first indicator works, use the same process to create the remaining programme indicators.</p>
+
+<div class="table-wrap"><table>
+<tr><th>Indicator</th><th>Numerator</th><th>Denominator</th><th>Factor</th></tr>
+<tr><td>Malaria Testing Rate (%)</td><td>Malaria tests performed</td><td>Suspected malaria cases</td><td>100</td></tr>
+<tr><td>Test Positivity Rate (%)</td><td>Confirmed malaria cases</td><td>Malaria tests performed</td><td>100</td></tr>
+<tr><td>ACT Treatment Rate (%)</td><td>Patients treated with ACT</td><td>Confirmed uncomplicated cases</td><td>100</td></tr>
+<tr><td>Referral Rate (%)</td><td>Malaria referrals</td><td>Malaria cases</td><td>100</td></tr>
+</table></div>
+
+<p><strong>Important:</strong> Confirm the programme's official indicator definitions before implementing these formulas. The examples above illustrate the structure, not a replacement for the NMCP indicator reference definitions.</p>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot of the completed indicator list.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 19: Add Indicators to Analytical Workflows</div>
+<div class="content">
+<p>After testing, use the indicators in analytical applications such as Data Visualizer, dashboards, maps and reports where appropriate.</p>
+
+<div class="action"><strong>Example:</strong> Data Visualizer → Indicator → Organisation Unit → Period → Chart/Table/Map</div>
+
+<div class="result"><strong>Expected result:</strong> The indicator can be used consistently across DHIS2 analytics.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT SCREENSHOT HERE</strong>Insert a screenshot showing the indicator being used in an analytical visualization.</div></div>
+</div></div>
+
+<div class="step">
+<div class="step-title">Step 20: Final Indicator Quality Check</div>
+<div class="content">
+<ul>
+<li>☐ Indicator name is clear.</li>
+<li>☐ Short name is appropriate.</li>
+<li>☐ Code is unique if codes are used.</li>
+<li>☐ Indicator type is correct.</li>
+<li>☐ Numerator is correct.</li>
+<li>☐ Denominator is correct.</li>
+<li>☐ Factor is correct.</li>
+<li>☐ Aggregation operators are appropriate.</li>
+<li>☐ Sharing/access is configured.</li>
+<li>☐ Indicator has been tested with known data.</li>
+<li>☐ Manual calculation agrees with DHIS2.</li>
+<li>☐ Zero/missing denominator behavior has been reviewed.</li>
+<li>☐ Indicator works in Data Visualizer.</li>
+<li>☐ Programme definition has been checked against the official indicator reference.</li>
+</ul>
+
+<div class="result"><strong>Final result:</strong> The indicator is configured, tested and ready for approved analytical use.</div>
+
+<div class="screenshot"><div><strong>📸 INSERT FINAL SCREENSHOT HERE</strong>Insert the final approved indicator configuration and/or visualization screenshot.</div></div>
+</div></div>
+
+<div class="note">
+<strong>Important distinction:</strong> An indicator is a calculated analytical object. It is not normally a replacement for the underlying data elements. Keep the underlying data elements well defined and use indicators to calculate the programme measures derived from them.
+</div>
+
+<nav class="topic-nav" aria-label="Topics"><a class="prev" href="DHIS2_File_2_Design_Form_HTML_Guide.html"><small>Previous topic</small>&#8592; 2. Design the form</a><a class="next" href="DHIS2_File_4_Interactive_Dashboards_Powerful_Design_HTML_Guide.html"><small>Next topic</small>4. Design interactive dashboards &#8594;</a></nav>
+<div class="footer">DHIS2 Indicators — Step-by-Step Implementation Guide</div>
+</div>
+</body>
+</html>
