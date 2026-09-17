@@ -262,7 +262,7 @@ table.de-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
     <div class="intro">
         <strong>Purpose of this guide</strong>
         <p>
-            Data often needs to be broken down, for example by sex or age group. This guide builds that breakdown in three parts: category options, categories and the category combination. Before you start, log in and open the Maintenance app as shown in Topic 1. After completing each step, insert a screenshot of your DHIS2 screen in the screenshot area.
+            Data often needs to be broken down, for example by where the facility is. The Sierra Leone demo already has a Sex category combination, so creating another one would give a name error. This guide therefore builds <strong>Location</strong>, with the options Rural and Urban, in three parts: category options, categories and the category combination. Before you start, log in and open the Maintenance app as shown in Topic 1. After completing each step, insert a screenshot of your DHIS2 screen in the screenshot area.
         </p>
     </div>
 
@@ -271,8 +271,8 @@ table.de-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
         <div class="step-header">Step 1: Create Category Options</div>
         <div class="step-body">
             <p>
-                If your form needs disaggregation such as sex or age group, create
-                the required category options.
+                Start with the category options, which are the values the breakdown can
+                take. For Location these are Rural and Urban. Create them one at a time.
             </p>
 
             <div class="click-path">
@@ -280,9 +280,10 @@ table.de-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
             </div>
 
             <div class="enter-box">
-                <strong>Example:</strong><br><br>
-                Category: Sex<br>
-                Options: Male, Female
+                <table class="creds">
+                    <tr><th>Category option 1</th><td>Rural</td></tr>
+                    <tr><th>Category option 2</th><td>Urban</td></tr>
+                </table>
             </div>
 
             <div class="result">
@@ -312,9 +313,11 @@ table.de-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
             </div>
 
             <div class="enter-box">
-                <strong>Example:</strong><br><br>
-                Category name: Sex<br>
-                Category options: Male, Female
+                <table class="creds">
+                    <tr><th>Name</th><td>Location</td></tr>
+                    <tr><th>Data dimension type</th><td>Disaggregation</td></tr>
+                    <tr><th>Category options</th><td>Rural, Urban</td></tr>
+                </table>
             </div>
 
             <div class="result">
@@ -345,14 +348,24 @@ table.de-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
             </div>
 
             <div class="enter-box">
-                <strong>Example:</strong><br><br>
-                Name: Sex<br>
-                Category: Sex
+                <table class="creds">
+                    <tr><th>Name</th><td>Location</td></tr>
+                    <tr><th>Data dimension type</th><td>Disaggregation</td></tr>
+                    <tr><th>Categories</th><td>Location</td></tr>
+                </table>
             </div>
 
             <div class="result">
                 <strong>Expected result:</strong>
                 The category combination is available for assignment to data elements or datasets.
+            </div>
+
+            <div class="tip">
+                <strong>Avoid name errors:</strong>
+                do not use Sex here, because the demo already has a Sex category combination.
+                Search the lists before you save. If Rural, Urban or Location already exists,
+                or someone else in the room has just created it, add your initials,
+                for example Location JT.
             </div>
 
             <div class="screenshot">
