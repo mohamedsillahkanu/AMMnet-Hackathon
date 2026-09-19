@@ -147,6 +147,26 @@ table.de-table td.n{width:38px;text-align:center;font-weight:800;color:var(--acc
 table.de-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
 .shot figcaption em{display:block;margin-top:4px;font-size:14px}
 </style>
+<style id="device-fit">
+/* Device fit: phone, tablet and laptop */
+html{-webkit-text-size-adjust:100%}
+img,table,pre{max-width:100%}
+pre,code{overflow-wrap:anywhere}
+figure.shot img{height:auto}
+@media (max-width:900px){
+  .back-pill{padding:12px 18px;font-size:15px}
+  .topic-nav a{padding:14px 16px}
+  .aida-bar a{padding:10px 16px}
+}
+@media (max-width:640px){
+  .step-body,.content,.intro,.note{padding-left:14px;padding-right:14px}
+  .step-header,.step-title{padding-left:14px;padding-right:14px;font-size:17px}
+  table{font-size:14px}
+  .click-path,.action,.result,.tip,.enter-box,.example{padding-left:14px;padding-right:14px}
+  ol.pins{grid-template-columns:1fr}
+  h1{font-size:26px}
+}
+</style>
 </head>
 <body class="topic-4">
 <a class="back-pill" href="index.html" onclick="if(document.referrer&&/index\.html$|\/$/.test(document.referrer.split('?')[0])&&history.length>1){history.back();return false;}">&#8592; Back to the hackathon home</a>
